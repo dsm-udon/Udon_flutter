@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:udon_flutter/model.dart';
-
 import 'package:http/http.dart' as http;
+
+import 'package:udon_flutter/model.dart';
 
 Future<TestList> getList() async {
   var url = 'https://jsonplaceholder.typicode.com/albums';
@@ -37,19 +37,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: model,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('데이터 파싱 준비'),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+      future: model,
+      builder: (context, snapshot) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(snapshot.data!.tests![0].title.toString()),
+          ),
+        );
+      },
+    );
   }
 }

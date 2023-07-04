@@ -12,18 +12,20 @@ class Test {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['userId'] = userId;
-    data['id'] = id;
-    data['title'] = title;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userId'] = this.userId;
+    data['id'] = this.id;
+    data['title'] = this.title;
     return data;
   }
 }
 
 class TestList {
-  final List<Test>? tests;
-  TestList({this.tests});
+  //class 생성
+  final List<Test>? tests; //tests라는 List 생성
+  TestList({this.tests}); //생성자로 TestList에 받기
   factory TestList.fromJson(List<dynamic> json) {
+    //factory
     List<Test> tests = <Test>[];
     tests = json.map((i) => Test.fromJson(i)).toList();
 
