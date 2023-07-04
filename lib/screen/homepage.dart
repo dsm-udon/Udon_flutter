@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:udon_flutter/model.dart';
-import 'package:udon_flutter/screen/realhome.dart';
 
 Future<TestList> getList() async {
   var url = 'https://jsonplaceholder.typicode.com/albums';
@@ -28,8 +28,58 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+int _selecte1 = 1;
+int _selecte2 = 0;
+
 class _HomePageState extends State<HomePage> {
   Future<TestList>? model;
+
+  void getLocation() async {
+    // 위치 정보 서비스 사용 가능한지 확인
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // 위치 정보 서비스 활성화 확인
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return;
+    }
+
+    // 위치 정보 권한 확인
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return;
+      }
+    }
+
+    // 위치 정보 받기
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.low,
+    );
+
+    // 위치 정보 사용
+    double latitude = position.latitude;
+    double longitude = position.longitude;
+
+    print('Latitude: $latitude, Longitude: $longitude');
+  }
+
+  void _fselecte1() {
+    setState(() {
+      _selecte1 = 1;
+      _selecte2 = 0;
+    });
+  }
+
+  void _fselecte2() {
+    setState(() {
+      _selecte1 = 0;
+      _selecte2 = 1;
+    });
+  }
 
   @override
   void initState() {
@@ -77,12 +127,16 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _fselecte1();
+                      },
                       child: Container(
                         width: 83.w,
                         height: 34.h,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFA902),
+                          color: _selecte1 == 1
+                              ? const Color(0xFFFFA902)
+                              : const Color(0xFF1D1B20).withOpacity(0.12),
                           borderRadius: BorderRadius.circular(100),
                         ),
                         child: Padding(
@@ -92,28 +146,26 @@ class _HomePageState extends State<HomePage> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14.sp,
-                              color: Colors.white,
+                              color: _selecte1 == 1
+                                  ? Colors.white
+                                  : const Color(0xFF1D1B20).withOpacity(0.38),
                             ),
-                          ),
+                          ), //1D1B20
                         ),
                       ),
                     ),
                     SizedBox(width: 11.w),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/', (_) => false);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RealHome()),
-                        );
+                        _fselecte2();
                       },
                       child: Container(
                         width: 70.w,
                         height: 34.h,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1D1B20).withOpacity(0.12),
+                          color: _selecte2 == 1
+                              ? const Color(0xFFFFA902)
+                              : const Color(0xFF1D1B20).withOpacity(0.12),
                           borderRadius: BorderRadius.circular(100),
                         ),
                         child: Padding(
@@ -123,7 +175,9 @@ class _HomePageState extends State<HomePage> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14.sp,
-                              color: const Color(0xFF1D1B20).withOpacity(0.38),
+                              color: _selecte2 == 1
+                                  ? Colors.white
+                                  : const Color(0xFF1D1B20).withOpacity(0.38),
                             ),
                           ),
                         ),
@@ -132,21 +186,26 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 48.h, 0.w, 0.h),
-                child: Text(
-                  '안양시 만안구',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'NotoSansKR',
-                  ),
-                ),
-              ),
+              _selecte1 == 1 ? screen1() : screen2()
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: getLocation,
           ),
         );
       },
     );
   }
+}
+
+Column screen1() {
+  return const Column(
+    children: [Text('screen1')],
+  );
+}
+
+Column screen2() {
+  return const Column(
+    children: [Text('screen2')],
+  );
 }
