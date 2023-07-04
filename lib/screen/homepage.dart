@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:kpostal/kpostal.dart';
 
 import 'package:udon_flutter/model.dart';
+import 'package:udon_flutter/screen/shelter.dart';
 
 Future<TestList> getList() async {
   var url = 'https://jsonplaceholder.typicode.com/albums';
@@ -30,22 +32,21 @@ class HomePage extends StatefulWidget {
 
 int _selecte1 = 1;
 int _selecte2 = 0;
+String address = '안양시 만안구';
+bool myLoc = true;
 
 class _HomePageState extends State<HomePage> {
   Future<TestList>? model;
 
   void getLocation() async {
-    // 위치 정보 서비스 사용 가능한지 확인
     bool serviceEnabled;
     LocationPermission permission;
 
-    // 위치 정보 서비스 활성화 확인
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return;
     }
 
-    // 위치 정보 권한 확인
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -55,12 +56,10 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    // 위치 정보 받기
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.low,
     );
 
-    // 위치 정보 사용
     double latitude = position.latitude;
     double longitude = position.longitude;
 
@@ -68,6 +67,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fselecte1() {
+    //color
     setState(() {
       _selecte1 = 1;
       _selecte2 = 0;
@@ -75,13 +75,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fselecte2() {
+    //color
     setState(() {
       _selecte1 = 0;
       _selecte2 = 1;
     });
   }
 
-  @override
+  @override //model
   void initState() {
     super.initState();
     model = getList();
@@ -118,6 +119,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ],
+                    ),
+                    IconButton(
+                      onPressed: getLocation,
+                      icon: Icon(
+                        Icons.refresh,
+                        weight: 5.w,
+                      ),
                     )
                   ],
                 ),
@@ -189,23 +197,202 @@ class _HomePageState extends State<HomePage> {
               _selecte1 == 1 ? screen1() : screen2()
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: getLocation,
-          ),
         );
       },
     );
   }
-}
 
-Column screen1() {
-  return const Column(
-    children: [Text('screen1')],
-  );
-}
+  Padding screen1() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 48.h, 0.w, 0.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '안양시 만안구',
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'NotoSansKR',
+            ),
+          ),
+          Text(
+            '지진',
+            style: TextStyle(
+              fontSize: 48.sp,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'NotoSansKR',
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: Container(
+              alignment: Alignment.centerRight,
+              child: Image.asset(
+                "assets/img/지진.png",
+                width: 164.w,
+                height: 164.h,
+              ),
+            ),
+          ),
+          SizedBox(height: 122.h),
+          Text(
+            '행동 요령',
+            style: TextStyle(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'NotoSansKR',
+            ),
+          ),
+          SizedBox(height: 75.h),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Shelter(),
+                ),
+              );
+            },
+            child: Container(
+              width: 328.w,
+              height: 44.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: const Color(0xFFFFB320),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(top: 7.w),
+                child: Text(
+                  '대피소 정보',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'NotoSansKR',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-Column screen2() {
-  return const Column(
-    children: [Text('screen2')],
-  );
+  Padding screen2() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 48.h, 0.w, 0.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            address,
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'NotoSansKR',
+            ),
+          ),
+          Text(
+            '지진',
+            style: TextStyle(
+              fontSize: 48.sp,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'NotoSansKR',
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: Container(
+              alignment: Alignment.centerRight,
+              child: Image.asset(
+                "assets/img/지진.png",
+                width: 164.w,
+                height: 164.h,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 57.h, left: 11.w), //left 27.w
+            child: GestureDetector(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KpostalView(
+                      callback: (Kpostal result) {
+                        setState(() {
+                          address = result.address;
+                        });
+                      },
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                width: 305,
+                height: 45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: const Color(0xFFFFB320),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10.w, 12.h, 0.w, 0.h),
+                  child: Text(
+                    "도로명 주소 찾기",
+                    style: TextStyle(fontSize: 15.sp),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20.h),
+          Text(
+            '행동 요령',
+            style: TextStyle(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'NotoSansKR',
+            ),
+          ),
+          SizedBox(height: 75.h),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Shelter(),
+                ),
+              );
+            },
+            child: Container(
+              width: 328.w,
+              height: 44.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: const Color(0xFFFFB320),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(top: 7.w),
+                child: Text(
+                  '대피소 정보',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'NotoSansKR',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

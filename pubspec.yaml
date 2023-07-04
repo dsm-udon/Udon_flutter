@@ -39,6 +39,7 @@ dependencies:
   flutter_native_splash: ^2.3.1
   http: ^1.1.0
   geolocator: ^9.0.2
+  kpostal: ^0.5.1
 
 
 dev_dependencies:
