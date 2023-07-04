@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:udon_flutter/model.dart';
+import 'package:udon_flutter/screen/mainselecte.dart';
 
 Future<TestList> getList() async {
   var url = 'https://jsonplaceholder.typicode.com/albums';
@@ -40,8 +42,13 @@ class _HomePageState extends State<HomePage> {
       future: model,
       builder: (context, snapshot) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(snapshot.data!.tests![0].title.toString()),
+          body: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(7.w, 30.h, 0.w, 0.h),
+                child: Selecte(),
+              ),
+            ],
           ),
         );
       },
