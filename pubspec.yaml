@@ -40,6 +40,10 @@ dependencies:
   http: ^1.1.0
   geolocator: ^9.0.2
   kpostal: ^0.5.1
+  firebase_messaging: ^14.6.4
+  flutter_local_notifications: ^15.0.0
+  get: ^4.6.5
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:

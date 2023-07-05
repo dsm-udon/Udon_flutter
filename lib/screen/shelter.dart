@@ -77,7 +77,7 @@ class _ShelterState extends State<Shelter> {
                 return Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.block, weight: 10.w),
+                      leading: Image.asset('assets/img/대피소.png'),
                       title: Text('어쩌다 대피소',
                           style: TextStyle(
                               fontSize: 20.sp,

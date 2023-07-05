@@ -6,11 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kpostal/kpostal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:udon_flutter/model.dart';
 import 'package:udon_flutter/screen/shelter.dart';
 
 Future<TestList> getList() async {
+  //http
   var url = 'https://jsonplaceholder.typicode.com/albums';
   final response = await http.get(Uri.parse(url));
 
@@ -32,13 +34,27 @@ class HomePage extends StatefulWidget {
 
 int _selecte1 = 1;
 int _selecte2 = 0;
-String address = '안양시 만안구';
+
+SharedPreferences? _prefs;
+String address = '지역을 설정해 주세요';
 bool myLoc = true;
+
+String realhome = '';
 
 class _HomePageState extends State<HomePage> {
   Future<TestList>? model;
 
+  @override //model
+  void initState() {
+    super.initState();
+    model = getList();
+    getLocation();
+    realhome = address.toString();
+    _loadId();
+  }
+
   void getLocation() async {
+    //위도 경도
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -66,6 +82,17 @@ class _HomePageState extends State<HomePage> {
     print('Latitude: $latitude, Longitude: $longitude');
   }
 
+  _loadId() async {
+    //_loadId함수(비동기)
+    _prefs = await SharedPreferences
+        .getInstance(); // 캐시에 저장되어있는 값을 불러온다.(불러 올때까지 대기)
+    setState(() {
+      // 캐시에 저장된 값을 반영하여 현재 상태를 설정한다.
+      // SharedPreferences에 id, pw로 저장된 값을 읽어 필드에 저장. 없을 경우 0으로 대입
+      address = (_prefs!.getString('realhome') ?? address);
+    });
+  }
+
   void _fselecte1() {
     //color
     setState(() {
@@ -80,12 +107,6 @@ class _HomePageState extends State<HomePage> {
       _selecte1 = 0;
       _selecte2 = 1;
     });
-  }
-
-  @override //model
-  void initState() {
-    super.initState();
-    model = getList();
   }
 
   @override
@@ -120,13 +141,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    IconButton(
-                      onPressed: getLocation,
-                      icon: Icon(
-                        Icons.refresh,
-                        weight: 5.w,
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -236,13 +250,22 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(height: 122.h),
-          Text(
-            '행동 요령',
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'NotoSansKR',
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '행동 요령',
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'NotoSansKR',
+                ),
+              ),
+              IconButton(
+                onPressed: getLocation,
+                icon: const Icon(Icons.refresh),
+              ),
+            ],
           ),
           SizedBox(height: 75.h),
           GestureDetector(
@@ -324,6 +347,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) => KpostalView(
                       callback: (Kpostal result) {
                         setState(() {
+                          _prefs!.setString('realhome', result.address);
                           address = result.address;
                         });
                       },
