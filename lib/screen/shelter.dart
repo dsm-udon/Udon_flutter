@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:udon_flutter/model.dart';
+import 'package:udon_flutter/screen/webview.dart';
 
 Future<TestList> getList() async {
   var url = 'https://jsonplaceholder.typicode.com/albums';
@@ -75,24 +76,34 @@ class _ShelterState extends State<Shelter> {
               physics: const BouncingScrollPhysics(),
               itemCount: snapshot.data!.tests!.length,
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    ListTile(
-                      leading: Image.asset('assets/img/대피소.png'),
-                      title: Text('어쩌다 대피소',
-                          style: TextStyle(
-                              fontSize: 20.sp,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GoogleMap(),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Image.asset('assets/img/대피소.png'),
+                        title: Text('어쩌다 대피소',
+                            style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'NotoSansKR')),
+                        subtitle: Text('대전 광역시 유성구 가정북로 68',
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
-                              fontFamily: 'NotoSansKR')),
-                      subtitle: Text('대전 광역시 유성구 가정북로 68',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'NotoSansKR',
-                          )),
-                    ),
-                    SizedBox(height: 8.h)
-                  ],
+                              fontFamily: 'NotoSansKR',
+                            )),
+                      ),
+                      SizedBox(height: 8.h)
+                    ],
+                  ),
                 );
               },
             ),

@@ -13,8 +13,7 @@ import 'package:udon_flutter/screen/shelter.dart';
 import 'package:udon_flutter/screen/avoid.dart';
 
 Future<TestList> getList() async {
-  //http
-  var url = 'https://jsonplaceholder.typicode.com/albums';
+  var url = 'https://jsonplaceholder.typicode.com/albums'; //http
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -55,8 +54,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getLocation() async {
-    //위도 경도
-    bool serviceEnabled;
+    bool serviceEnabled; //위도 경도
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
