@@ -84,12 +84,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   _loadId() async {
-    //_loadId함수(비동기)
-    _prefs = await SharedPreferences
-        .getInstance(); // 캐시에 저장되어있는 값을 불러온다.(불러 올때까지 대기)
+    _prefs = await SharedPreferences.getInstance();
     setState(() {
-      // 캐시에 저장된 값을 반영하여 현재 상태를 설정한다.
-      // SharedPreferences에 id, pw로 저장된 값을 읽어 필드에 저장. 없을 경우 0으로 대입
       address = (_prefs!.getString('realhome') ?? address);
     });
   }

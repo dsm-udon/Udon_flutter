@@ -43,56 +43,85 @@ class _AvoidState extends State<Avoid> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
               backgroundColor: Colors.white,
-              toolbarHeight: 99.w,
-              elevation: 0,
-              surfaceTintColor: Colors.white,
-              title: Text(
-                '대피 방법',
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'NotoSansKR',
-                  color: Colors.black,
-                ),
-              ),
-              leading: Padding(
-                padding: EdgeInsets.only(left: 10.w),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                toolbarHeight: 99.w,
+                elevation: 0,
+                surfaceTintColor: Colors.white,
+                title: Text(
+                  '대피 방법',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'NotoSansKR',
                     color: Colors.black,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                ),
+                leading: Padding(
+                  padding: EdgeInsets.only(left: 10.w),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
               ),
-            ),
-            body: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: snapshot.data!.tests!.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        '${index + 1}. 우동 우동 우동 우동 우동 우동 우동',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'NotoSansKR',
+              body: Column(
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/img/홍수.png',
+                        width: 180.w,
+                        height: 180.h,
+                      ),
+                      SizedBox(
+                        width: 180.w,
+                        height: 180.h,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 68.h),
+                          child: Text(
+                            '홍수',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32.sp,
+                                fontFamily: 'NotoSansKR'),
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: snapshot.data!.tests!.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                '${index + 1}. 우동 우동 우동 우동 우동 우동 우동',
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'NotoSansKR',
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8.h)
+                          ],
+                        );
+                      },
                     ),
-                    SizedBox(height: 8.h)
-                  ],
-                );
-              },
-            ),
-          );
+                  ),
+                ],
+              ));
         } else if (snapshot.hasError) {
           return Text(snapshot.hasError.toString());
         } else {
