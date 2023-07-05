@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:udon_flutter/model.dart';
 import 'package:udon_flutter/screen/shelter.dart';
+import 'package:udon_flutter/screen/avoid.dart';
 
 Future<TestList> getList() async {
   //http
@@ -208,7 +209,77 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              _selecte1 == 1 ? screen1() : screen2()
+              SizedBox(height: 30.h),
+              _selecte1 == 1 ? screen1() : screen2(),
+              SizedBox(height: 20.h),
+              Padding(
+                padding: EdgeInsets.only(left: 16.w, bottom: 16.h),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Avoid(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 328.w,
+                    height: 44.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xFFDCDCDC),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 7.w),
+                      child: Text(
+                        '대피 방법',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF564D4D),
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'NotoSansKR',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16.w, bottom: 16.h),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Shelter(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 328.w,
+                    height: 44.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xFFFFB320),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 7.w),
+                      child: Text(
+                        '대피소 정보',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'NotoSansKR',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -216,206 +287,139 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding screen1() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 48.h, 0.w, 0.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '안양시 만안구',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'NotoSansKR',
-            ),
-          ),
-          Text(
-            '지진',
-            style: TextStyle(
-              fontSize: 48.sp,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'NotoSansKR',
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: Image.asset(
-                "assets/img/지진.png",
-                width: 164.w,
-                height: 164.h,
-              ),
-            ),
-          ),
-          SizedBox(height: 122.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '행동 요령',
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'NotoSansKR',
-                ),
-              ),
-              IconButton(
-                onPressed: getLocation,
-                icon: const Icon(Icons.refresh),
-              ),
-            ],
-          ),
-          SizedBox(height: 75.h),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Shelter(),
-                ),
-              );
-            },
-            child: Container(
-              width: 328.w,
-              height: 44.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: const Color(0xFFFFB320),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(top: 7.w),
-                child: Text(
-                  '대피소 정보',
-                  textAlign: TextAlign.center,
+  Expanded screen1() {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.only(left: 16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '안양시 만안구',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'NotoSansKR',
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsets.only(right: 15.w),
+                  child: IconButton(
+                    onPressed: getLocation,
+                    icon: const Icon(Icons.refresh),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              '지진',
+              style: TextStyle(
+                fontSize: 48.sp,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'NotoSansKR',
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Image.asset(
+                  "assets/img/지진.png",
+                  width: 164.w,
+                  height: 164.h,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Padding screen2() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 48.h, 0.w, 0.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            address,
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'NotoSansKR',
-            ),
-          ),
-          Text(
-            '지진',
-            style: TextStyle(
-              fontSize: 48.sp,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'NotoSansKR',
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: Image.asset(
-                "assets/img/지진.png",
-                width: 164.w,
-                height: 164.h,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 57.h, left: 11.w), //left 27.w
-            child: GestureDetector(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => KpostalView(
-                      callback: (Kpostal result) {
-                        setState(() {
-                          _prefs!.setString('realhome', result.address);
-                          address = result.address;
-                        });
-                      },
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                width: 305,
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color: const Color(0xFFFFB320),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(10.w, 12.h, 0.w, 0.h),
-                  child: Text(
-                    "도로명 주소 찾기",
-                    style: TextStyle(fontSize: 15.sp),
+  Expanded screen2() {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Text(
+                  address,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'NotoSansKR',
                   ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(height: 20.h),
-          Text(
-            '행동 요령',
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'NotoSansKR',
-            ),
-          ),
-          SizedBox(height: 75.h),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Shelter(),
-                ),
-              );
-            },
-            child: Container(
-              width: 328.w,
-              height: 44.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: const Color(0xFFFFB320),
-              ),
-              child: Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 7.w),
                 child: Text(
-                  '대피소 정보',
-                  textAlign: TextAlign.center,
+                  '지진',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
+                    fontSize: 48.sp,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'NotoSansKR',
                   ),
                 ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(right: 16.w),
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Image.asset(
+                    "assets/img/지진.png",
+                    width: 164.w,
+                    height: 164.h,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 57.h, left: 11.w), //left 27.w
+                child: GestureDetector(
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => KpostalView(
+                          callback: (Kpostal result) {
+                            setState(() {
+                              _prefs!.setString('realhome', result.address);
+                              address = result.address;
+                            });
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 305,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: const Color(0xFFFFB320),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10.w, 12.h, 0.w, 0.h),
+                      child: Text(
+                        "도로명 주소 찾기",
+                        style: TextStyle(fontSize: 15.sp),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

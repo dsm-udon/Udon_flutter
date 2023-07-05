@@ -20,14 +20,14 @@ Future<TestList> getList() async {
   }
 }
 
-class Shelter extends StatefulWidget {
-  const Shelter({Key? key}) : super(key: key);
+class Avoid extends StatefulWidget {
+  const Avoid({Key? key}) : super(key: key);
 
   @override
-  State<Shelter> createState() => _ShelterState();
+  State<Avoid> createState() => _AvoidState();
 }
 
-class _ShelterState extends State<Shelter> {
+class _AvoidState extends State<Avoid> {
   Future<TestList>? model;
 
   @override //model
@@ -50,7 +50,7 @@ class _ShelterState extends State<Shelter> {
               elevation: 0,
               surfaceTintColor: Colors.white,
               title: Text(
-                '대피소 정보',
+                '대피 방법',
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
@@ -78,18 +78,14 @@ class _ShelterState extends State<Shelter> {
                 return Column(
                   children: [
                     ListTile(
-                      leading: Image.asset('assets/img/대피소.png'),
-                      title: Text('어쩌다 대피소',
-                          style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'NotoSansKR')),
-                      subtitle: Text('대전 광역시 유성구 가정북로 68',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'NotoSansKR',
-                          )),
+                      title: Text(
+                        '${index + 1}. 우동 우동 우동 우동 우동 우동 우동',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'NotoSansKR',
+                        ),
+                      ),
                     ),
                     SizedBox(height: 8.h)
                   ],
