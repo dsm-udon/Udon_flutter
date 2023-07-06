@@ -82,6 +82,10 @@ class _ShelterState extends State<Shelter> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const GoogleMap(),
+                        settings: RouteSettings(
+                          arguments:
+                              snapshot.data!.tests![index].title.toString(),
+                        ),
                       ),
                     );
                   },

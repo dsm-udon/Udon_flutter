@@ -8,9 +8,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:udon_flutter/model.dart';
 import 'package:udon_flutter/screen/shelter.dart';
 import 'package:udon_flutter/screen/avoid.dart';
+import 'package:udon_flutter/notification.dart';
 
 Future<TestList> getList() async {
   var url = 'https://jsonplaceholder.typicode.com/albums'; //http
@@ -22,6 +26,30 @@ Future<TestList> getList() async {
     );
   } else {
     throw Exception('No Server Response');
+  }
+}
+
+Future postMyLocation(latitude, longitude) async {
+  var response = await http.post(
+    Uri.parse('http://192.168.1.76:8080/post'),
+    headers: {'Content-Type': 'application/json'}, //필수
+    body: jsonEncode({"latitude": latitude, "longitude": longitude}),
+  );
+
+  if (response.statusCode != 200) {
+    throw Exception(response.body);
+  }
+}
+
+Future postRealHome(location) async {
+  var response = await http.post(
+    Uri.parse('http://192.168.1.76:8080/post'),
+    headers: {'Content-Type': 'application/json'}, //필수
+    body: jsonEncode({"location": location}),
+  );
+
+  if (response.statusCode != 200) {
+    throw Exception(response.body);
   }
 }
 
@@ -47,6 +75,7 @@ class _HomePageState extends State<HomePage> {
   @override //model
   void initState() {
     super.initState();
+    initNotification();
     model = getList();
     getLocation();
     realhome = address.toString();
@@ -79,6 +108,7 @@ class _HomePageState extends State<HomePage> {
     double longitude = position.longitude;
 
     print('Latitude: $latitude, Longitude: $longitude');
+    postMyLocation(latitude, longitude);
   }
 
   _loadId() async {
@@ -383,10 +413,13 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(
                         builder: (context) => KpostalView(
                           callback: (Kpostal result) {
-                            setState(() {
-                              _prefs!.setString('realhome', result.address);
-                              address = result.address;
-                            });
+                            setState(
+                              () {
+                                address = result.address;
+                                _prefs!.setString('realhome', result.address);
+                                postRealHome(result.address);
+                              },
+                            );
                           },
                         ),
                       ),

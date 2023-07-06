@@ -11,12 +11,8 @@ class GoogleMap extends StatefulWidget {
 
 class _GoogleMapState extends State<GoogleMap> {
   late WebViewController controller;
-  final String url =
-      'https://www.google.co.kr/maps/search/37.46025100+,130.87382100?entry=ttu';
 
-  @override
-  void initState() {
-    super.initState();
+  void webView(url) {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
@@ -25,9 +21,14 @@ class _GoogleMapState extends State<GoogleMap> {
 
   @override
   Widget build(BuildContext context) {
+    final title = ModalRoute.of(context)!.settings.arguments;
+    final String url =
+        'https://www.google.co.kr/maps/search/$title+,130.87382100?entry=ttu';
+//37.46025100
+    webView(url);
+
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFFFFB320),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
